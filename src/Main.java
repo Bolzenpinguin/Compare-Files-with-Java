@@ -86,7 +86,7 @@ public class Main {
         if(commentsProcess)
             System.out.println(nameTXT + " successful created and filled.");
     }
-        static String[] MissingFiles(String[] mainArray, String[] subArray) {
+    static String[] MissingFiles(String[] mainArray, String[] subArray) {
         boolean contains;
         for (int i = 0; i < mainArray.length; i++) {
             for (int j = 0; j < subArray.length; j++) {
@@ -149,26 +149,26 @@ public class Main {
 
         return filledArray;
     }
-    static void RecursivePrint(File[] file, PrintWriter outputMain, int level, boolean formatting)
+    static void RecursivePrint(File[] fileDelivered, PrintWriter output, int level, boolean formatting)
     {
         // for-each loop for main directory files
 
-        for (File fone : file) {
+        for (File file : fileDelivered) {
         //enhanced for loop --> let you easy go through file
 
             if (formatting) {
                 for (int i = 0; i < level; i++)
-                    outputMain.print("\t");
+                    output.print("\t");
             }
 
 
-            if (fone.isFile())
-                outputMain.println((fone.getName()));
+            if (file.isFile())
+                output.println((file.getName()));
 
-            else if (fone.isDirectory()) {
-                outputMain.println("[" + fone.getName() + "]");
+            else if (file.isDirectory()) {
+                output.println("[" + file.getName() + "]");
                 // recursion for sub-directories
-                RecursivePrint(Objects.requireNonNull(fone.listFiles()), outputMain, level + 1, formatting);
+                RecursivePrint(Objects.requireNonNull(file.listFiles()), output, level + 1, formatting);
             }
         }
 
