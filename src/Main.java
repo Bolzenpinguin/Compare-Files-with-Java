@@ -50,7 +50,7 @@ public class Main {
 
         subArray = ReadFromFiles(nameSubTXT, lineCountSub);
 
-        String[] cleandArrayFinal = MissingFiles( mainArray, subArray);
+        String[] cleanedArrayFinal = MissingFiles( mainArray, subArray);
 
         // Delete maindir.txt and subdir.txt temp files
         if (deleteTempFiles) {
@@ -58,7 +58,7 @@ public class Main {
             CleanUP(new File(nameSubTXT),commentsProcess);
         }
 
-        PrintMissingFiles(cleandArrayFinal);
+        PrintMissingFiles(cleanedArrayFinal);
 
     }
     static void PrintMissingFiles(String[] cleanedArrayFinal) {
@@ -116,24 +116,20 @@ public class Main {
         }
     }
     static int LineCount(String nameTXT) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(nameTXT)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(nameTXT)));
 
         int lineCount = 0;
-        while (br.readLine() != null)
+        while (reader.readLine() != null)
             lineCount++;
 
         return lineCount;
     }
-    static String[] ReadFromFiles(String nameTXT, int lineCount) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(nameTXT)));
-
+    static String[] ReadFromFiles(String nameTXT, int lineCount) {
         String[] filledArray = new String[lineCount];
         int place = 0;
 
-        BufferedReader reader;
-
         try {
-            reader = new BufferedReader(new FileReader(nameTXT));
+            BufferedReader reader = new BufferedReader(new FileReader(nameTXT));
             String line = reader.readLine();
 
             while (line != null) {
@@ -149,12 +145,11 @@ public class Main {
 
         return filledArray;
     }
-    static void RecursivePrint(File[] fileDelivered, PrintWriter output, int level, boolean formatting)
-    {
+    static void RecursivePrint(File[] fileDelivered, PrintWriter output, int level, boolean formatting) {
         // for-each loop for main directory files
 
         for (File file : fileDelivered) {
-        //enhanced for loop --> let you easy go through file
+        // enhanced for loop --> let you easy go through file
 
             if (formatting) {
                 for (int i = 0; i < level; i++)
