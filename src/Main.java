@@ -5,8 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-// TODO: Print txt with missing files and folders --> PrintMissingFiles()
-
 public class Main {
     public static void main(String[] args) throws IOException {
 
@@ -16,12 +14,16 @@ public class Main {
         boolean deleteTempFiles = true;
         // set true for comments in process
         boolean commentsProcess = false;
+        // set false for result print console
+        boolean resultPrintTXT = true;
 
         String nameMainTXT = "maindir.txt";
         String nameSubTXT = "subdir.txt";
+        String nameResultsTXT = "result.txt";
 
         PrintWriter outputMain = new PrintWriter(nameMainTXT);
         PrintWriter outputSub = new PrintWriter(nameSubTXT);
+        PrintWriter outputResult = new PrintWriter(nameResultsTXT);
 
         String maindirpath
                 = "/Users/kurtschubert/Desktop/test/testA";
@@ -31,7 +33,6 @@ public class Main {
         // File object
         File maindir = new File(maindirpath);
         File subdir = new File(subdirpath);
-
 
         FillFiles(maindir, outputMain, formatting, nameMainTXT, commentsProcess);
         FillFiles(subdir, outputSub, formatting, nameSubTXT, commentsProcess);
@@ -58,14 +59,30 @@ public class Main {
             CleanUP(new File(nameSubTXT),commentsProcess);
         }
 
-        PrintMissingFiles(cleanedArrayFinal);
+        PrintMissingFiles(cleanedArrayFinal, outputResult, resultPrintTXT);
 
     }
-    static void PrintMissingFiles(String[] cleanedArrayFinal) {
-        System.out.println("Following files and [folders] are missing: ");
-        for (int i = 0; i < cleanedArrayFinal.length; i++) {
-            System.out.println(cleanedArrayFinal[i]);
+    static void PrintMissingFiles(String[] cleanedArrayFinal, PrintWriter outputResult, boolean resultPrintTXT) throws IOException {
+        // Write Results in txt or console
+        if (resultPrintTXT) {
+            outputResult.println("Following files and [folders] are missing: ");
+            outputResult.println();
+
+            for (int i = 0; i < cleanedArrayFinal.length; i++) {
+                outputResult.println(cleanedArrayFinal[i]);
+            }
+
+            outputResult.close();
+        } else {
+            System.out.println("Following files and [folders] are missing: ");
+            System.out.println();
+
+            for (int i = 0; i < cleanedArrayFinal.length; i++) {
+                System.out.println(cleanedArrayFinal[i]);
+            }
+
         }
+
     }
     static void FillFiles(File file, PrintWriter outputTXT, boolean formatting, String nameTXT, boolean commentsProcess) {
         if ((file.exists() && file.isDirectory())) {
