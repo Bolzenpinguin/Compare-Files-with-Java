@@ -9,11 +9,12 @@ public class ResultScanned extends FileObject {
         // Inheritance from FileObject
         super(nameTXT, formatting, commentsProcess);
         /* return from constructor
-        name,
-        formatting,
-        commentsProcess,
-        fileOfTXT,
-        outputWritten */
+            String nameTXT;
+            boolean formatting;
+            boolean commentsProcess;
+            File fileOfTXT;
+            PrintWriter outputWritten;
+        */
         this.resultPrintTXT = resultPrintTXT; // print out as txt or in console
 
     }

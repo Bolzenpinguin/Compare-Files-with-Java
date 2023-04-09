@@ -8,22 +8,22 @@ public class ToScannedFiles extends FileObject {
     private String path;
     private BufferedReader reader;
     private File pathOfFolderAsFile;
+    private File[] listFiles;
 
     // ************************************ Constructor ************************************
     public ToScannedFiles(String nameTXT, String path, boolean formatting, boolean deleteTempFile, boolean commentsProcess) throws IOException {
         // Inheritance from FileObject
         super(nameTXT, formatting, commentsProcess);
         /* return from constructor
-        name,
-        formatting,
-        commentsProcess,
-        fileOfTXT,
-        outputWritten */
-
+            String nameTXT;
+            boolean formatting;
+            boolean commentsProcess;
+        */
         this.deleteTempFile = deleteTempFile;
         this.path = path;
         this.reader = new BufferedReader(new InputStreamReader((new FileInputStream(nameTXT))));
         this.pathOfFolderAsFile = new File(path);
+        this.listFiles = pathOfFolderAsFile.listFiles();
 
     }
 
@@ -83,7 +83,51 @@ public class ToScannedFiles extends FileObject {
     }
 
     private String[] CleanArrayUp (String[] arrayCleaner) {
+        // clean all null values from array and simultaneously shorten the array
         return Arrays.stream(arrayCleaner).filter(Objects::nonNull).toArray(String[]::new);
+    }
+
+
+    public void RecursiveSearchThroughFiles(File[] fileDelivered, int level) {
+        // for-each loop for main directory files
+
+        for (File file : fileDelivered) {
+            // enhanced for loop --> let you easy go through file
+            // works only with this method probably do constructor creation otherwise
+
+            if (formatting) {
+                for (int i = 0; i < level; i++)
+                    outputWritten.print("\t");
+            }
+
+            if (file.isFile())
+                outputWritten.println((file.getName()));
+
+            else if (file.isDirectory()) {
+                outputWritten.println("[" + file.getName() + "]");
+                // recursion for sub-directories
+                RecursiveSearchThroughFiles(Objects.requireNonNull(file.listFiles()), level + 1);
+            }
+        }
+    }
+
+
+    public void FillFiles() {
+        if ((pathOfFolderAsFile.exists() && pathOfFolderAsFile.isDirectory())) {
+
+            // Check if files exists
+            assert listFiles != null;
+
+            RecursiveSearchThroughFiles(listFiles, 0);
+
+        } else {
+            System.out.println("Paths not correct for: " + pathOfFolderAsFile.getName() +"Exit!");
+            System.exit(1);
+        }
+
+        outputWritten.close();
+        if(commentsProcess)
+            System.out.println(nameTXT + " successful created and filled.");
     }
 
 }
