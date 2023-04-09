@@ -1,9 +1,6 @@
 import java.io.*;
 import java.util.Arrays;
 import java.util.Objects;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -11,24 +8,36 @@ public class Main {
         // set only true if you want to have a good view in the txt data
         boolean formatting = true;
         // set false if you want to keep the txt files
-        boolean deleteTempFiles = true;
+        boolean deleteTempFiles = false;
         // set true for comments in process
         boolean commentsProcess = false;
         // set false for result print console
         boolean resultPrintTXT = true;
 
-        String nameMainTXT = "maindir.txt";
-        String nameSubTXT = "subdir.txt";
-        String nameResultsTXT = "result.txt";
+        String nameMainTXT = "Main directory.txt";
+        String nameSubTXT = "Sub directory.txt";
+        String nameResultsTXT = "Result.txt";
+
+        // Paths of search folders
+        String maindirpath
+                = "/Users/kurtschubert/Desktop/test/testA";
+        String subdirpath
+                = "/Users/kurtschubert/Desktop/test/testB";
+
+        // OO Test
+        ToScannedFiles fileMain = new ToScannedFiles(nameMainTXT, maindirpath, formatting, deleteTempFiles, commentsProcess);
+        ToScannedFiles fileSub = new ToScannedFiles(nameSubTXT, subdirpath, formatting, deleteTempFiles, commentsProcess);
+
+        ResultScanned fileResult = new ResultScanned(nameResultsTXT, formatting, commentsProcess, resultPrintTXT);
+
 
         PrintWriter outputMain = new PrintWriter(nameMainTXT);
         PrintWriter outputSub = new PrintWriter(nameSubTXT);
         PrintWriter outputResult = new PrintWriter(nameResultsTXT);
 
-        String maindirpath
-                = "/Users/kurtschubert/Desktop/test/testA";
-        String subdirpath
-                = "/Users/kurtschubert/Desktop/test/testB";
+
+
+
 
         // File object
         File maindir = new File(maindirpath);
@@ -37,29 +46,24 @@ public class Main {
         FillFiles(maindir, outputMain, formatting, nameMainTXT, commentsProcess);
         FillFiles(subdir, outputSub, formatting, nameSubTXT, commentsProcess);
 
-        // get Lines from mainTXT
-        int lineCountMain = LineCount(nameMainTXT);
-        int lineCountSub = LineCount(nameSubTXT);
-
         // maindir.txt  *****************************************
-        String[] mainArray;
-
-        mainArray = ReadFromFiles(nameMainTXT, lineCountMain);
+        String[] mainArray = fileMain.ReadFileIn();
 
         // subdir.txt  *****************************************
-        String[] subArray;
+        String[] subArray = fileSub.ReadFileIn();
 
-        subArray = ReadFromFiles(nameSubTXT, lineCountSub);
-
-        String[] cleanedArrayFinal = MissingFiles( mainArray, subArray);
+        // Find differences
+        String[] cleanedArrayFinal = fileMain.MissingFiles(mainArray, subArray);
 
         // Delete maindir.txt and subdir.txt temp files
         if (deleteTempFiles) {
-            CleanUP(new File(nameMainTXT), commentsProcess);
-            CleanUP(new File(nameSubTXT),commentsProcess);
+            fileMain.CleanUP();
+            fileSub.CleanUP();
         }
 
-        PrintMissingFiles(cleanedArrayFinal, outputResult, resultPrintTXT);
+        fileResult.PrintMissingFiles(cleanedArrayFinal);
+        //PrintMissingFiles(cleanedArrayFinal, outputResult, resultPrintTXT);
+
 
     }
     static void PrintMissingFiles(String[] cleanedArrayFinal, PrintWriter outputResult, boolean resultPrintTXT) throws IOException {
@@ -84,6 +88,8 @@ public class Main {
         }
 
     }
+
+
     static void FillFiles(File file, PrintWriter outputTXT, boolean formatting, String nameTXT, boolean commentsProcess) {
         if ((file.exists() && file.isDirectory())) {
 
@@ -103,25 +109,46 @@ public class Main {
         if(commentsProcess)
             System.out.println(nameTXT + " successful created and filled.");
     }
-    static String[] MissingFiles(String[] mainArray, String[] subArray) {
-        boolean contains;
-        for (int i = 0; i < mainArray.length; i++) {
-            for (int j = 0; j < subArray.length; j++) {
-                contains = Arrays.asList(mainArray[i]).contains(subArray[j]);
 
-                if (contains) {
-                    mainArray[i] = null;
-                }
+    static void RecursivePrint(File[] fileDelivered, PrintWriter output, int level, boolean formatting) {
+        // for-each loop for main directory files
+
+        for (File file : fileDelivered) {
+            // enhanced for loop --> let you easy go through file
+
+            if (formatting) {
+                for (int i = 0; i < level; i++)
+                    output.print("\t");
+            }
+
+
+            if (file.isFile())
+                output.println((file.getName()));
+
+            else if (file.isDirectory()) {
+                output.println("[" + file.getName() + "]");
+                // recursion for sub-directories
+                RecursivePrint(Objects.requireNonNull(file.listFiles()), output, level + 1, formatting);
             }
         }
+    }
 
-        mainArray = CleanArrayUp(mainArray);
-        return mainArray;
+}
+
+/*
+// TODO Ausgelagert!
+
+    static int LineCount(String nameTXT) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(nameTXT)));
+
+        int lineCount = 0;
+        while (reader.readLine() != null)
+            lineCount++;
+
+        return lineCount;
     }
-    static String[] CleanArrayUp (String[] arrayCleaner) {
-        return Arrays.stream(arrayCleaner).filter(Objects::nonNull).toArray(String[]::new);
-    }
-    static void CleanUP(File nameTXT, boolean commentsProcess) {
+
+        static void CleanUP(File nameTXT, boolean commentsProcess) {
 
         // Delete of temp files
         if (nameTXT.delete()) {
@@ -132,15 +159,7 @@ public class Main {
             System.exit(1);
         }
     }
-    static int LineCount(String nameTXT) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(nameTXT)));
 
-        int lineCount = 0;
-        while (reader.readLine() != null)
-            lineCount++;
-
-        return lineCount;
-    }
     static String[] ReadFromFiles(String nameTXT, int lineCount) {
         String[] filledArray = new String[lineCount];
         int place = 0;
@@ -162,28 +181,26 @@ public class Main {
 
         return filledArray;
     }
-    static void RecursivePrint(File[] fileDelivered, PrintWriter output, int level, boolean formatting) {
-        // for-each loop for main directory files
-
-        for (File file : fileDelivered) {
-        // enhanced for loop --> let you easy go through file
-
-            if (formatting) {
-                for (int i = 0; i < level; i++)
-                    output.print("\t");
-            }
 
 
-            if (file.isFile())
-                output.println((file.getName()));
 
-            else if (file.isDirectory()) {
-                output.println("[" + file.getName() + "]");
-                // recursion for sub-directories
-                RecursivePrint(Objects.requireNonNull(file.listFiles()), output, level + 1, formatting);
+    static String[] MissingFiles(String[] mainArray, String[] subArray) {
+        boolean contains;
+        for (int i = 0; i < mainArray.length; i++) {
+            for (int j = 0; j < subArray.length; j++) {
+                contains = Arrays.asList(mainArray[i]).contains(subArray[j]);
+
+                if (contains) {
+                    mainArray[i] = null;
+                }
             }
         }
 
-
+        mainArray = CleanArrayUp(mainArray);
+        return mainArray;
     }
-}
+    static String[] CleanArrayUp (String[] arrayCleaner) {
+        return Arrays.stream(arrayCleaner).filter(Objects::nonNull).toArray(String[]::new);
+    }
+
+ */
