@@ -47,5 +47,8 @@ public class Main {
         }
 
         fileResult.PrintMissingFiles(cleanedArrayFinal);
+
+        // Window Frame  *****************************************
+        FrameWindow.FrameShowing();
     }
 }

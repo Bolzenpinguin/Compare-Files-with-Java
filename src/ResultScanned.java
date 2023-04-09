@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class ResultScanned extends FileObject {
 
@@ -19,14 +18,14 @@ public class ResultScanned extends FileObject {
 
     }
 
-    public void PrintMissingFiles(String[] arrayGivenWithNull) throws IOException {
+    public void PrintMissingFiles(String[] arrayGivenWithoutNull) {
         // Write Results in txt or console
         if (resultPrintTXT) {
             outputWritten.println("Following files and [folders] are missing: ");
             outputWritten.println();
 
-            for (int i = 0; i < arrayGivenWithNull.length; i++) {
-                outputWritten.println(arrayGivenWithNull[i]);
+            for (int i = 0; i < arrayGivenWithoutNull.length; i++) {
+                outputWritten.println(arrayGivenWithoutNull[i]);
             }
 
             outputWritten.close();
@@ -34,8 +33,8 @@ public class ResultScanned extends FileObject {
             System.out.println("Following files and [folders] are missing: ");
             System.out.println();
 
-            for (int i = 0; i < arrayGivenWithNull.length; i++) {
-                System.out.println(arrayGivenWithNull[i]);
+            for (int i = 0; i < arrayGivenWithoutNull.length; i++) {
+                System.out.println(arrayGivenWithoutNull[i]);
             }
 
         }
