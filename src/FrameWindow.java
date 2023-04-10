@@ -1,12 +1,22 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class FrameWindow {
 
     public static void FrameShowing() {
-        JFrame firstFrame = new JFrame("Compare Files");
-        firstFrame.setSize(200, 300);
-        firstFrame.add(new JLabel("Beispiel"));
-        firstFrame.setVisible(true);
+        JFrame frame = new JFrame("Compare Files");
+
+        // Styling
+        frame.getContentPane().setBackground(Color.lightGray);
+        frame.setSize(800, 800);
+        frame.setLocationRelativeTo(null); // JFrame in center
+
+
+        // declare default functions
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        // show Frame
+        frame.setVisible(true);
     }
 
 }
