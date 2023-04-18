@@ -49,6 +49,6 @@ public class Main {
         fileResult.PrintMissingFiles(cleanedArrayFinal);
 
         // Window Frame  *****************************************
-        FrameWindowContent.FrameShowing();
+        new FrameWindowContent("result.txt");
     }
 }

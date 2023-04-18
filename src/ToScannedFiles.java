@@ -67,7 +67,8 @@ public class ToScannedFiles extends FileObject {
     public String[] MissingFiles(String[] mainArray, String[] subArray) {
         boolean contains;
         int counterMain;
-        char getTabBack = '\t';
+        char topSide = '↳';
+        char side = '→';
 
         for (int i = 0; i < mainArray.length; i++) {
             for (int j = 0; j < subArray.length; j++) {
@@ -82,7 +83,11 @@ public class ToScannedFiles extends FileObject {
                     mainArray[i] = null;
                 } else {
                     for (int x = 0; x < counterMain; x++)
-                        mainArray[i] = getTabBack + mainArray[i];
+                        if (x == counterMain-1 ) {
+                            mainArray[i] = topSide + mainArray[i];
+                        } else {
+                            mainArray[i] = side + mainArray[i];
+                        }
                 }
             }
         }

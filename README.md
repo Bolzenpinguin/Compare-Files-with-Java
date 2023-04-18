@@ -2,4 +2,4 @@ This is an application that look through two given folders and give all files an
 
 Syntax is: java -jar "Compare Files with Java" *First path* *Second path*
 
-Currently working on creating an interface with a Drag & Drop functionality. 
+Currently working on creating an interface with a Drag & Drop functionality.

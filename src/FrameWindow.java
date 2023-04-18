@@ -4,7 +4,7 @@ import java.awt.*;
 public class FrameWindow {
 
     public static void FrameShowing() {
-        JFrame frame = new JFrame("Compare Files");
+        JFrame frame = new JFrame("Compare Files with Java");
 
         // Styling
         frame.getContentPane().setBackground(Color.lightGray);
