@@ -5,10 +5,9 @@ import java.util.Objects;
 public class ToScannedFiles extends FileObject {
 
     public boolean deleteTempFile;
-    private String path;
-    private BufferedReader reader;
-    private File pathOfFolderAsFile;
-    private File[] listFiles;
+    private final BufferedReader reader;
+    private final File pathOfFolderAsFile;
+    private final File[] listFiles;
 
     // ************************************ Constructor ************************************
     public ToScannedFiles(String nameTXT, String path, boolean formatting, boolean deleteTempFile, boolean commentsProcess) throws IOException {
@@ -20,7 +19,6 @@ public class ToScannedFiles extends FileObject {
             boolean commentsProcess;
         */
         this.deleteTempFile = deleteTempFile;
-        this.path = path;
         this.reader = new BufferedReader(new InputStreamReader((new FileInputStream(nameTXT))));
         this.pathOfFolderAsFile = new File(path);
         this.listFiles = pathOfFolderAsFile.listFiles();
@@ -68,18 +66,43 @@ public class ToScannedFiles extends FileObject {
 
     public String[] MissingFiles(String[] mainArray, String[] subArray) {
         boolean contains;
+        int counterMain;
+        char getTabBack = '\t';
+
         for (int i = 0; i < mainArray.length; i++) {
             for (int j = 0; j < subArray.length; j++) {
+
+                // remove tabs (\t) from the Strings
+                counterMain = removeTabFront(mainArray, i);
+                removeTabFront(subArray, j);
+
                 contains = Arrays.asList(mainArray[i]).contains(subArray[j]);
 
                 if (contains) {
                     mainArray[i] = null;
+                } else {
+                    for (int x = 0; x < counterMain; x++)
+                        mainArray[i] = getTabBack + mainArray[i];
                 }
             }
         }
 
         mainArray = CleanArrayUp(mainArray);
         return mainArray;
+    }
+
+    private int removeTabFront(String[] mainArray, int i) {
+        char mainChar;
+        int counter = 0;
+        if(mainArray[i] != null) {
+            mainChar = mainArray[i].charAt(0);
+            while ( mainChar == '\t') {
+                mainArray[i] = mainArray[i].replaceFirst("\t", "");
+                counter++;
+                mainChar = mainArray[i].charAt(0);
+            }
+        }
+        return counter;
     }
 
     private String[] CleanArrayUp (String[] arrayCleaner) {
@@ -91,12 +114,11 @@ public class ToScannedFiles extends FileObject {
     public void RecursiveSearchThroughFiles(File[] fileDelivered, int level) {
         // for-each loop for main directory files
 
-        for (File file : fileDelivered) {
-            // enhanced for loop --> let you easy go through file
-            // works only with this method probably do constructor creation otherwise
+        for (int i = 0; i < fileDelivered.length; i++) {
+            File file = fileDelivered[i];
 
             if (formatting) {
-                for (int i = 0; i < level; i++)
+                for (int j = 0; j < level; j++)
                     outputWritten.print("\t");
             }
 
@@ -121,7 +143,7 @@ public class ToScannedFiles extends FileObject {
             RecursiveSearchThroughFiles(listFiles, 0);
 
         } else {
-            System.out.println("Paths not correct for: " + pathOfFolderAsFile.getName() +"Exit!");
+            System.out.println("Paths not correct for: " + pathOfFolderAsFile.getName() +" Exit!");
             System.exit(1);
         }
 

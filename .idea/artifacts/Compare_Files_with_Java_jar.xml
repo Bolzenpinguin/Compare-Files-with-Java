@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Compare Files with Java:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Compare_Files_with_Java_jar</output-path>
+    <root id="archive" name="Compare Files with Java.jar">
+      <element id="module-output" name="Compare Files with Java" />
+    </root>
+  </artifact>
+</component>

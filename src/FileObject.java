@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 
 public class FileObject {
     // Superclass
-
     public String nameTXT;
     public boolean formatting;
     public boolean commentsProcess;

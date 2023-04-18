@@ -7,7 +7,7 @@ public class Main {
         boolean formatting = true;
         // set false if you want to keep the txt files
         boolean deleteTempFiles = true;
-        // set true for comments in process
+        // set true for comments in process to console
         boolean commentsProcess = false;
         // set false for result print console
         boolean resultPrintTXT = true;
@@ -17,14 +17,14 @@ public class Main {
         String nameResultsTXT = "Result.txt";
 
         // Paths of search folders
-        String maindirpath
-                = "/Users/kurtschubert/Desktop/test/testA";
-        String subdirpath
-                = "/Users/kurtschubert/Desktop/test/testB";
+        String mainDirectory
+                = args[0];
+        String subdirectory
+                = args[1];
 
         // Object Creation
-        ToScannedFiles fileMain = new ToScannedFiles(nameMainTXT, maindirpath, formatting, deleteTempFiles, commentsProcess);
-        ToScannedFiles fileSub = new ToScannedFiles(nameSubTXT, subdirpath, formatting, deleteTempFiles, commentsProcess);
+        ToScannedFiles fileMain = new ToScannedFiles(nameMainTXT, mainDirectory, formatting, deleteTempFiles, commentsProcess);
+        ToScannedFiles fileSub = new ToScannedFiles(nameSubTXT, subdirectory, formatting, deleteTempFiles, commentsProcess);
         ResultScanned fileResult = new ResultScanned(nameResultsTXT, formatting, commentsProcess, resultPrintTXT);
 
         // Fill txt Files with results
