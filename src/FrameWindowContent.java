@@ -48,7 +48,10 @@ public class FrameWindowContent extends JFrame {
         // Add JScrollPane to JFrame
         add(scrollPane);
 
+
         // Set JFrame visible
         setVisible(true);
     }
+
+
 }

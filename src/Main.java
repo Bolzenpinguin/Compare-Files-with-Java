@@ -3,6 +3,7 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) throws IOException {
 
+
         // set only true if you want to have a good view in the txt data
         boolean formatting = true;
         // set false if you want to keep the txt files
@@ -49,6 +50,9 @@ public class Main {
         fileResult.PrintMissingFiles(cleanedArrayFinal);
 
         // Window Frame  *****************************************
+        // new FrameWindowStart();
+
         new FrameWindowContent("result.txt");
     }
+
 }
